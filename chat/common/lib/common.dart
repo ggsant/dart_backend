@@ -1,8 +1,36 @@
-/// Support for doing something awesome.
-///
-/// More dartdocs go here.
 library common;
 
-export 'src/common_base.dart';
+class Socketevent {
+  final String name;
+  final String room;
+  final String message;
+  final SocketeventType type;
 
-// TODO: Export any libraries intended for clients of this package.
+  Socketevent({
+    required this.name,
+    required this.room,
+    required this.message,
+    required this.type,
+  });
+
+  Map tojson() {
+    return {
+      'name': name,
+      'room': room,
+      'message': message,
+      'type': type.toString(),
+    };
+  }
+
+  factory Socketevent.fromJson(Map json) {
+    return Socketevent(
+      name: json['name'],
+      room: json['room'],
+      message: json['message'],
+      type: SocketeventType.values
+          .firstWhere((element) => element.toString() == json['type']),
+    );
+  }
+}
+
+enum SocketeventType { enter_room, leave_room, message }

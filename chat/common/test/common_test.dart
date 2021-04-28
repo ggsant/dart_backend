@@ -2,15 +2,22 @@ import 'package:common/common.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('A group of tests', () {
-    Awesome awesome;
+  setUp(() {});
 
-    setUp(() {
-      awesome = Awesome();
-    });
+  final json = {
+    'name': 'Gabi',
+    'room': 'sala 1',
+    'message': '',
+    'type': 'SocketeventType.enter_room',
+  };
 
-    test('First Test', () {
-      expect(awesome.isAwesome, isTrue);
-    });
+  test('Should ', () async {
+    //*arrange
+    final event = Socketevent.fromJson(json);
+    //?act
+    //!assert
+    expect(event.name, 'Gabi');
+    expect(event.type, SocketeventType.enter_room);
+    expect(event.tojson(), json);
   });
 }
