@@ -1,5 +1,7 @@
 library common;
 
+const String API_SERVER = 'https://dart-socket.herokuapp.com/';
+
 class Socketevent {
   final String name;
   final String room;
@@ -13,7 +15,7 @@ class Socketevent {
     required this.type,
   });
 
-  Map tojson() {
+  Map toJson() {
     return {
       'name': name,
       'room': room,

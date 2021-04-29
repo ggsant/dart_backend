@@ -18,6 +18,6 @@ void main() {
     //!assert
     expect(event.name, 'Gabi');
     expect(event.type, SocketeventType.enter_room);
-    expect(event.tojson(), json);
+    expect(event.toJson(), json);
   });
 }
