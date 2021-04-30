@@ -19,7 +19,7 @@ class ProductsController {
       );
     } catch (e) {
       final error = {
-        'msg': 'Erro ao cadastrar!',
+        'msg': 'Erro ao adicionar produtos!',
         'error': e.toString(),
       };
       return Response.internalServerError(body: jsonEncode(error), headers: {
@@ -43,7 +43,7 @@ class ProductsController {
       // );
     } catch (e) {
       final error = {
-        'msg': 'Erro ao cadastrar!',
+        'msg': 'Erro ao editar um produto!',
         'error': e.toString(),
       };
       return Response.internalServerError(body: jsonEncode(error), headers: {
@@ -58,7 +58,7 @@ class ProductsController {
       return Response.ok('produtos');
     } catch (e) {
       final error = {
-        'msg': 'Erro ao cadastrar!',
+        'msg': 'Erro ao buscar produtos.',
         'error': e.toString(),
       };
       return Response.internalServerError(body: jsonEncode(error), headers: {
@@ -73,7 +73,7 @@ class ProductsController {
       return Response.ok('produtos $id');
     } catch (e) {
       final error = {
-        'msg': 'Erro ao cadastrar!',
+        'msg': 'Erro ao buscar produtos.',
         'error': e.toString(),
       };
       return Response.internalServerError(body: jsonEncode(error), headers: {
@@ -91,7 +91,7 @@ class ProductsController {
       );
     } catch (e) {
       final error = {
-        'msg': 'Erro ao cadastrar!',
+        'msg': 'Erro ao deletar um produto.',
         'error': e.toString(),
       };
       return Response.internalServerError(body: jsonEncode(error), headers: {
