@@ -3,8 +3,16 @@ import 'dart:convert';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 
-class LoginApi {
-  Handler get handler {
+import '../infras/security/security_service.dart';
+import 'api.dart';
+
+class LoginApi extends Api {
+  final SecurityService service;
+
+  LoginApi(this.service);
+
+  @override
+  Handler getHandler({List<Middleware>? middlewares}) {
     final router = Router();
 
     router.post('/login', (Request request) async {
@@ -13,20 +21,15 @@ class LoginApi {
       final user = json['user'];
       final password = json['password'];
 
-      final jsonResponse = jsonEncode({
-        'token': 'adjsklewqruifdjks',
-        'userId': '$user',
-      });
-
       if (user == 'adm' && password == '123') {
-        return Response.ok(jsonResponse, headers: {
-          'content-type': 'application/json',
-        });
+        final token = await service.generateJwt('1234');
+        final response = await service.validateJwt(token);
+        return Response.ok(response != null ? "Acesso Permitido" : "Token Invalido");
       } else {
         return Response.forbidden('Acesso negado!');
       }
     });
 
-    return router;
+    return createHandler(router: router, middlewares: middlewares);
   }
 }

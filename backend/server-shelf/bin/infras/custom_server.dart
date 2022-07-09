@@ -2,14 +2,15 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 
 class CustomServer {
-  Future<void> initializeServer(Handler handler) async {
-    final String address = 'localhost';
-    final int port = 8080;
-    print('Starting the server 🙏');
-
+  Future<void> initializeServer({
+    required Handler handler,
+    required String address,
+    required int port,
+  }) async {
     try {
-      print('Server started: http://localhost:8080 👍');
+      print('Starting the server 🙏');
       await shelf_io.serve(handler, address, port);
+      print('Server started: http://localhost:8080 👍');
     } catch (e) {
       print('Error trying to start the server. 👎');
     }
