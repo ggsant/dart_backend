@@ -1,28 +1,21 @@
 import 'package:shelf/shelf.dart';
-
 import 'apis/crud.dart';
 import 'apis/login_api.dart';
+import 'dependency_injector/container.dart';
 import 'infras/custom_server.dart';
-import 'infras/middleware_intersection.dart';
-import 'infras/security/security_service.dart';
-import 'services/content_service.dart';
+import 'infras/middleware_interceptor.dart';
 import 'utils/custom_env.dart';
 
 void main() async {
-  final service = ContentService();
-  final securityService = SecurityService();
-
+  final di = Container.initialize();
   final cascadeHandler = Cascade() //
-      .add((LoginApi(securityService).getHandler()))
-      .add((CrudApi(service).getHandler(middlewares: [
-        securityService.authorization,
-        securityService.verifyJwt,
-      ])))
+      .add(di.getInstance<LoginApi>().getHandler(isSecurity: false))
+      .add(di.getInstance<CrudApi>().getHandler())
       .handler;
 
   final handler = Pipeline() //
       .addMiddleware(logRequests())
-      .addMiddleware(MiddlewareIntersection().middleware)
+      .addMiddleware(MiddlewareInterceptor().middleware)
       .addHandler(cascadeHandler);
 
   await CustomServer().initializeServer(

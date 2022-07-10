@@ -1,5 +1,4 @@
 import 'dart:convert';
-import '../utils/parser_extension.dart';
 
 class ContentModel {
   ContentModel(
@@ -59,11 +58,11 @@ class ContentModel {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is ContentModel && other.id == id && other.content == content && other.criationDate == criationDate && other.updateDate == updateDate;
+    return other is ContentModel && other.id == id;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^ content.hashCode ^ criationDate.hashCode ^ updateDate.hashCode;
+    return id.hashCode;
   }
 }

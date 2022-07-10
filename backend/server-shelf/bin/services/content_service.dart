@@ -1,17 +1,24 @@
 import '../models/content_model.dart';
 import 'generic_service.dart';
 
-class ContentService implements GenericService<ContentModel> {
+class ContentService implements BaseService<ContentModel> {
   final Set<ContentModel> _fakeDb = {};
+
+  bool hasElement(int id) => findObject(id) != null;
 
   @override
   bool delete(int id) {
     try {
-      _fakeDb.removeWhere((element) => element.id == id);
-      return true;
+      if (hasElement(id)) {
+        _fakeDb.removeWhere((element) => element.id == id);
+        return true;
+      } else {
+        throw ArgumentError('No content found with the id: $id');
+      }
+    } on ArgumentError catch (error) {
+      throw Exception(error.message);
     } catch (error) {
-      Exception('Error when trying delete the object.');
-      return false;
+      throw Exception('Error when trying delete the object.');
     }
   }
 
@@ -23,20 +30,34 @@ class ContentService implements GenericService<ContentModel> {
     try {
       return _fakeDb.firstWhere((element) => element.id == id);
     } catch (error) {
-      Exception('Error when trying delete the object.');
-      return null;
+      throw Exception('Error when trying find the object.');
     }
   }
 
   @override
   bool save(ContentModel value) {
     try {
-      final obj = _fakeDb.firstWhere((element) => element.id == value.id, orElse: () => value);
-      _fakeDb.add(obj);
+      _fakeDb.add(value);
       return true;
     } catch (error) {
-      Exception('Error when trying save the object.');
-      return false;
+      throw Exception('Error when trying save the object.');
+    }
+  }
+
+  @override
+  bool edit(ContentModel value, int id) {
+    try {
+      if (hasElement(id)) {
+        delete(id);
+        save(value);
+        return true;
+      } else {
+        throw ArgumentError('No content found with the id: $id');
+      }
+    } on ArgumentError catch (error) {
+      throw Exception(error.message);
+    } catch (error) {
+      throw Exception('Error when trying edit the object.');
     }
   }
 }

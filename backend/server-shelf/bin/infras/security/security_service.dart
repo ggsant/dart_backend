@@ -4,10 +4,9 @@ import 'package:shelf/shelf.dart';
 import '../../utils/custom_env.dart';
 import 'security_service_generic.dart';
 
-class SecurityService implements SecurityServiceGeneric<JWT> {
+class SecurityServiceImpl implements SecurityService<JWT> {
   @override
   Future<String> generateJwt(String userId) async {
-    // Create a json web token
     final jwt = JWT(
       {
         'iat': DateTime.now().millisecondsSinceEpoch,
@@ -16,7 +15,6 @@ class SecurityService implements SecurityServiceGeneric<JWT> {
       },
     );
 
-    // Sign it (default with HS256 algorithm)
     final token = jwt.sign(SecretKey(await CustomEnv.get<String>(key: 'jwt_key')));
 
     print('Signed token: $token\n');
@@ -26,7 +24,6 @@ class SecurityService implements SecurityServiceGeneric<JWT> {
   @override
   Future<JWT?> validateJwt(String token) async {
     try {
-      // Verify a token
       final jwt = JWT.verify(token, SecretKey(await CustomEnv.get<String>(key: 'jwt_key')));
       print('Payload: ${jwt.payload}');
       return jwt;
@@ -50,7 +47,9 @@ class SecurityService implements SecurityServiceGeneric<JWT> {
     return (Handler handler) {
       return (Request request) async {
         final String? authorizationHeader = request.headers['Authorization'];
+
         JWT? jwt;
+
         if (authorizationHeader != null) {
           if (authorizationHeader.startsWith('Bearer ')) {
             final token = authorizationHeader.substring(7);
@@ -58,9 +57,9 @@ class SecurityService implements SecurityServiceGeneric<JWT> {
           }
         }
 
-        final newRequest = request.change(context: {
-          'jwt': jwt,
-        });
+        final newRequest = request.change(
+          context: {'jwt': jwt},
+        );
 
         return handler(newRequest);
       };

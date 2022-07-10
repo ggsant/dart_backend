@@ -1,6 +1,6 @@
 import 'package:shelf/shelf.dart';
 
-class MiddlewareIntersection {
+class MiddlewareInterceptor {
   Middleware get middleware {
     return createMiddleware(
       responseHandler: (Response response) {
